@@ -10,6 +10,7 @@ class ReturnForm(BaseModel): #Универсальный
     page: Optional[int] = None
     total_pages: Optional[int] = None
     limit: Optional[int] = None
+    id: Optional[int] = None
 
 class PasswordForm(BaseModel):
     password: str = Field(..., min_length=1, max_length=128, description='Пароль для выполнения команды')

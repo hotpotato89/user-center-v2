@@ -2,9 +2,12 @@ import asyncpg
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from dotenv import load_dotenv
 
 import schemas
 from log import get_logger
+
+load_dotenv()
 
 dsn = os.getenv('DATABASE_URL')
 if not dsn:
@@ -47,7 +50,7 @@ async def add_user_db(pool, user_data: schemas.UserDataForm):
         try:
             user_id = await session.fetchval('insert into users (name, age, email) values ($1, $2, $3) returning id', user_data.name, user_data.age, user_data.email)
             logger.info(f'Пользователь {user_data.email} создан, id={user_id}')
-            return schemas.ReturnForm(success=True, message=f'Успешно добавлен пользователь по айди {user_id}')
+            return schemas.ReturnForm(success=True, message=f'Пользователь успешно добавлен', id=user_id)
         except asyncpg.UniqueViolationError:
             logger.error('Пользователь с ввел существующий email')
             return schemas.ReturnForm(success=False, message=f'Пользователь с email \'{user_data.email}\' уже существует', error_code='conflict')
