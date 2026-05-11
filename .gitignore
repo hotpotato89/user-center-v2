@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+ENV/
+.env/
+
+# Базы данных (локальные файлы)
+*.db
+*.sqlite
+*.sqlite3
+
+# Переменные окружения (секреты)
+.env
+!.env.example
+.env.docker
+
+# Логи
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Тесты
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter (если не нужен)
+.ipynb_checkpoints/
+
+# Файлы блокировки зависимостей (по желанию)
+# poetry.lock
+# Pipfile.lock
+# pdm.lock
+
+# Временные файлы
+*.tmp
+*.bak
+*.orig
+*.rej
+*.pid
+*.dump
+
+#Линукс
+.directory
