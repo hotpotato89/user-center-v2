@@ -5,6 +5,7 @@ from asyncpg import Pool
 from redis.asyncio import Redis
 import json
 from datetime import datetime
+from decimal import Decimal
 
 #Для фронта
 from fastapi.staticfiles import StaticFiles
@@ -34,6 +35,9 @@ def get_redis() -> Redis:
 def json_encode(object):
     if isinstance(object, datetime):
         return object.isoformat()
+    if isinstance(object, Decimal):
+        return float(object)
+    raise TypeError(f"Object of type {type(object)} is not JSON serializable")
 
 @app.middleware('http')
 async def middleware_(request: Request, next_call):
@@ -60,8 +64,8 @@ async def stats_page(pool: Annotated[Pool, Depends(get_pool)]):
 
     result = await db.get_stats_db(pool)
     if not result.success:
+        await redis.delete('stats')
         if result.error_code == 'empty':
-            await redis.delete('stats')
             raise HTTPException(status_code=404, detail=result.message)
     
     # Сохраняем в кэш
