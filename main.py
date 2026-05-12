@@ -82,13 +82,29 @@ async def healthcheck():
 async def get_users(pool = Depends(get_pool),
                     limit: int = Query(..., ge=1, description='Лимит записей в одной странице'),
                     page: int = Query(..., ge=1, description='Какая страница будет просмотрена')):
+    redis = get_redis()
     limit = min(limit, 50)
     skip = (page-1)*limit
+
+    cache_key = f'users:limit={limit}:page={page}'
+    logger.info('Проверяем кэш')
+    cached = await redis.get(cache_key)
+    if cached:
+        logger.info('Кэш найден, возвращаем данные')
+        return json.loads(cached)
+
+    logger.info('Кэша нет, идём в БД')
+
     result = await db.get_users_db(pool=pool, limit=limit, skip=skip)
-    if result.success != True:
+    if not result.success:
         if result.error_code == 'empty':
             raise HTTPException(status_code=404, detail=result.message)
         raise HTTPException(status_code=500, detail=result.message)
+    
+    await redis.setex(cache_key, 10, json.dumps(result.dict(), default=json_encode))
+
+    logger.info('Данные получены из БД и сохранены в кэш')
+
     return result
 
 @app.post('/add_user', tags=MAIN_TAG)
