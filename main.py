@@ -19,6 +19,8 @@ from log import get_logger
 app = FastAPI(lifespan=db.lifespan, title='Моя API')
 logger = get_logger(__name__)
 MAIN_TAG: list = ['Моя API']
+TTL: int = 20
+PAGINATION_TTL: int = 120
 
 @app.get('/__flush_redis__')
 async def flush_redis(request: Request):
@@ -87,7 +89,7 @@ async def stats_page(pool: Annotated[Pool, Depends(get_pool)]):
             raise HTTPException(status_code=404, detail=result.message)
     
     # Сохраняем в кэш
-    await redis.setex('stats', 10, json.dumps(result.dict(), default=json_encode))
+    await redis.setex('stats', TTL, json.dumps(result.dict(), default=json_encode))
     logger.info('Данные получены из БД и сохранены в кэш')
     
     return result
@@ -119,7 +121,7 @@ async def get_users(pool = Depends(get_pool),
             raise HTTPException(status_code=404, detail=result.message)
         raise HTTPException(status_code=500, detail=result.message)
     
-    await redis.setex(cache_key, 10, json.dumps(result.dict(), default=json_encode))
+    await redis.setex(cache_key, PAGINATION_TTL, json.dumps(result.dict(), default=json_encode))
 
     logger.info('Данные получены из БД и сохранены в кэш')
 
