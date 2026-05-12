@@ -2,6 +2,9 @@ from fastapi import FastAPI, Request, Depends, HTTPException, Query
 from time import perf_counter
 from typing import Annotated
 from asyncpg import Pool
+from redis.asyncio import Redis
+import json
+from datetime import datetime
 
 #Для фронта
 from fastapi.staticfiles import StaticFiles
@@ -22,8 +25,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def main_page():
     return FileResponse('static/index.html')
 
-async def get_pool():
+def get_pool():
     return app.state.pool
+
+def get_redis() -> Redis:
+    return app.state.redis
+
+def json_encode(object):
+    if isinstance(object, datetime):
+        return object.isoformat()
 
 @app.middleware('http')
 async def middleware_(request: Request, next_call):
@@ -36,10 +46,28 @@ async def middleware_(request: Request, next_call):
 
 @app.get('/stats', tags=MAIN_TAG)
 async def stats_page(pool: Annotated[Pool, Depends(get_pool)]):
+    redis = get_redis()
+
+    # Проверяем кэш
+    cached = await redis.get('stats')
+    logger.info('Проверяем кэш')
+    
+    if cached:
+        logger.info('Кэш найден, возвращаем данные')
+        return json.loads(cached)
+    
+    logger.info('Кэша нет, идём в БД')
+
     result = await db.get_stats_db(pool)
     if not result.success:
         if result.error_code == 'empty':
+            await redis.delete('stats')
             raise HTTPException(status_code=404, detail=result.message)
+    
+    # Сохраняем в кэш
+    await redis.setex('stats', 10, json.dumps(result.dict(), default=json_encode))
+    logger.info('Данные получены из БД и сохранены в кэш')
+    
     return result
 
 @app.get('/health', tags=MAIN_TAG)
