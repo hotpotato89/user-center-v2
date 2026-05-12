@@ -20,6 +20,24 @@ app = FastAPI(lifespan=db.lifespan, title='Моя API')
 logger = get_logger(__name__)
 MAIN_TAG: list = ['Моя API']
 
+@app.get('/__flush_redis__')
+async def flush_redis(request: Request):
+    """Специальный эндпоинт для тестов, нужен для очистки кэша"""
+    allowed_ips = [
+        '127.0.0.1',
+        '::1',
+        '172.17.0.1',
+        '172.18.0.1',
+        '172.19.0.1'
+    ]
+    #Проверка:
+    if request.client.host not in allowed_ips: #type: ignore
+        raise HTTPException(status_code=403, detail='Method not allowed')
+    redis = get_redis()
+    await redis.flushall()
+    return schemas.ReturnForm(success=True, message='Flushed')
+
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
