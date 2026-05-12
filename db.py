@@ -3,6 +3,7 @@ import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from dotenv import load_dotenv
+from redis.asyncio import Redis
 
 import schemas
 from log import get_logger
@@ -15,6 +16,9 @@ if not dsn:
 admin_password = os.getenv('ADMIN_PASSWORD')
 if not admin_password:
     raise ValueError('Нет ADMIN_PASSWORD в файле .env')
+redis_url = os.getenv('REDIS_URL')
+if not redis_url:
+    raise ValueError('REDIS_URL нет в файле .env')
 logger = get_logger(__name__)
 
 @asynccontextmanager
@@ -30,9 +34,16 @@ async def lifespan(app: FastAPI):
         await session.execute('create index if not exists idx_regtime_desc on users(reg_time desc)')
         await session.execute('create index if not exists idx_age_max on users(age desc)')
         await session.execute('create index if not exists idx_age_min on users(age asc)')
+    #Код для Redis
+    app.state.redis = await Redis.from_url(redis_url, decode_responses=True) #type: ignore
+    await app.state.redis.ping() # type: ignore
+    logger.info('Соединение с Redis установлено')
+    #Дальше
     yield
-    logger.info('Пул соединений разорван')
+    await app.state.redis.close()
+    logger.info('Соединение с Redis разорвано')
     await app.state.pool.close()
+    logger.info('Пул соединений разорван')
 
 async def get_users_db(pool, limit: int, skip: int):
     async with pool.acquire() as session:
