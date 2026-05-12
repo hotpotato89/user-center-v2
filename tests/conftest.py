@@ -29,3 +29,9 @@ async def random_user() -> Dict:
 @pytest.fixture
 def password():
     return getenv('ADMIN_PASSWORD')
+
+@pytest.fixture(autouse=True)
+async def flush_redis(session, url):
+    await session.get(f'{url}/__flush_redis__')
+    yield
+    await session.get(f'{url}/__flush_redis__')
