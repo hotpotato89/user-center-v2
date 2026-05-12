@@ -24,6 +24,7 @@ POST /add_user - создать
 DELETE /delete_user - удалить
 DELETE /clear - очистить БД
 GET /health - проверка
+GET /__flush_redis__ - специальный роут для тестов, защищен для локального использования
 
 ## .env
 
@@ -33,3 +34,6 @@ DB_NAME=
 ADMIN_PASSWORD=
 DATABASE_URL=
 REDIS_URL=
+
+## Тесты (pytest + aiohttp)
+Были использованы фикстуры и одна авто-фикстура для очистки кэшаю Всего **12** тестов
