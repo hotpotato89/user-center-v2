@@ -63,3 +63,212 @@ htmlcov/
 
 #Линукс
 .directory
+
+#Тестовые sql скрипты
+*.sql
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.dll
+*.exe
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pyre/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+.env.*
+!.env.example
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.history/
+.sourcery/
+.cursor/
+
+# Logs
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose*.yml
+*.dockerignore
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Testing
+tests/__pycache__/
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Secrets and keys
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+.secrets/
+config/private/
+private/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+*~
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# SQL scripts (тестовые)
+*.sql
+!init.sql
+
+# Redis dump (если локально)
+dump.rdb
+appendonly.aof
+
+# Node modules (если вдруг)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Архивы
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Data folders
+data/
+tmp/
+temp/
