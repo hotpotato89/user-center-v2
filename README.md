@@ -1,9 +1,7 @@
-# User Center V2 (Live!)
+# User Center V2
 
-## 🌍 Живой проект
-
-- **API:** [http://user-center-xxro.onrender.com](http://user-center-xxro.onrender.com)
-- **Swagger UI:** [http://user-center-xxro.onrender.com/docs](http://user-center-xxro.onrender.com/docs)
+# Устарело. Актуальная версия:
+- **Репозиторий**: [https://sourcecraft.dev/hotpotato89/user-center-v3](https://sourcecraft.dev/hotpotato89/user-center-v3)
 
 REST API для управления пользователями с асинхронным кэшированием.
 
