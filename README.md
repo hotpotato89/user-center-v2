@@ -1,7 +1,7 @@
 # User Center V2
 
 # Устарело. Актуальная версия:
-- **Репозиторий**: [https://sourcecraft.dev/hotpotato89/user-center-v3](https://sourcecraft.dev/hotpotato89/user-center-v3)
+- **Репозиторий**: [https://github.com/hotpotato89/user-center-v3](https://github.com/hotpotato89/user-center-v3)
 
 REST API для управления пользователями с асинхронным кэшированием.
 
